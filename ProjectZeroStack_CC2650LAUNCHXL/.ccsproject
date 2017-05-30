@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVersion value="6.1.3"/>
+	<deviceVariant value="Cortex M.CC2650F128"/>
+	<deviceFamily value="TMS470"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="5.2.5"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<rts value="libc.a"/>
+	<createSlaveProjects value=""/>
+	<templateProperties value="id=ProjectZeroStack_CC2650LAUNCHXL.projectspec.ProjectZeroStack_CC2650LAUNCHXL,target=ti.targets.arm.elf.M3,platform=ti.platforms.simplelink:CC2650F128,buildProfile=release,isHybrid=true,configuroOptions=--compileOptions &quot;${COMPILER_FLAGS} &quot; ,"/>
+	<origin value="@ti-products/cc26xx_bluetooth_smart/cc26xx_bluetooth_smart__2.01.00.44423/Projects/ble/ProjectZero/CC26xx/CCS/Cloud/ProjectZeroStack_CC2650LAUNCHXL.projectspec"/>
+	<filesToOpen value=""/>
+</projectOptions>
