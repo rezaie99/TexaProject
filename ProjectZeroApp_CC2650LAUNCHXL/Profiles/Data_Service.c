@@ -427,6 +427,7 @@ static bStatus_t Data_Service_ReadAttrCB( uint16_t connHandle, gattAttribute_t *
   bStatus_t status = SUCCESS;
   uint16_t valueLen;
   uint8_t paramID = 0xFF;
+  DataService_SetParameter(DS_STRING_ID, sizeof(buff), buff);
 
   // Find settings for the characteristic to be read.
   paramID = Data_Service_findCharParamId( pAttr );

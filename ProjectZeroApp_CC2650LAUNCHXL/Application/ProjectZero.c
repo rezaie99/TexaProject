@@ -69,7 +69,8 @@
 #include "Button_Service.h"
 #include "Data_Service.h"
 
-
+#include <ti/sysbios/knl/Swi.h>
+#include <xdc/runtime/Error.h>
 /*********************************************************************
  * CONSTANTS
  */
@@ -184,12 +185,11 @@ static uint8_t advertData[] =
   // complete name
   13,
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-  'P', 'r', 'o', 'j', 'e', 'c', 't', ' ', 'T', 'w', 'o',
-
+  'P', 'r', 'o', 'j', 'e', 'c', 't', ' ', 'Z', 'e', 'r', 'o',
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Project Two";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Project Zero";
 
 // Globals used for ATT Response retransmission
 static gattMsgEvent_t *pAttRsp = NULL;
@@ -235,6 +235,8 @@ static uint8_t button1State = 0;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
+
+//static void SPI_transferCallback( SPI_Handle handle, SPI_Transaction *transaction );
 
 static void ProjectZero_init( void );
 static void ProjectZero_taskFxn(UArg a0, UArg a1);
@@ -611,7 +613,6 @@ static void ProjectZero_taskFxn(UArg a0, UArg a1)
   }
 }
 
-
 /*
  * @brief   Handle application messages
  *
@@ -626,6 +627,7 @@ static void ProjectZero_taskFxn(UArg a0, UArg a1)
  *
  * @return  None.
  */
+
 static void user_processApplicationMessage(app_msg_t *pMsg)
 {
   char_data_t *pCharData = (char_data_t *)pMsg->pdu;
@@ -641,7 +643,6 @@ static void user_processApplicationMessage(app_msg_t *pMsg)
         case DATA_SERVICE_SERV_UUID:
           user_DataService_ValueChangeHandler(pCharData);
           break;
-
       }
       break;
 
@@ -789,7 +790,9 @@ static void user_processGapStateChangeEvt(gaprole_States_t newState)
  */
 static void user_handleButtonPress(button_state_t *pState)
 {
-  uint32_t currVal = 0;
+	DataService_SetParameter(DS_STREAM_ID, DS_STREAM_LEN, buff);
+	DataService_SetParameter(DS_STRING_ID, DS_STRING_LEN, buff);
+
   Log_info2("%s %s",
     (IArg)(pState->pinId == Board_BUTTON0?"Button 0":"Button 1"),
     (IArg)(pState->state?"\x1b[32mpressed\x1b[0m":
@@ -797,26 +800,18 @@ static void user_handleButtonPress(button_state_t *pState)
 
   // Update the service with the new value.
   // Will automatically send notification/indication if enabled.
-  if(!PIN_getInputValue(pState->pinId)){
-      switch (pState->pinId)
-      {
-        case Board_BUTTON0:
-          ButtonService_SetParameter(BS_BUTTON0_ID,
-                                     sizeof(pState->state),
-                                     &pState->state);
-          
-          currVal =  PIN_getOutputValue(Board_LED0);
-          PIN_setOutputValue(ledPinHandle, Board_LED0, !currVal);
-          break;
-        case Board_BUTTON1:
-          ButtonService_SetParameter(BS_BUTTON1_ID,
-                                     sizeof(pState->state),
-                                     &pState->state);
-          currVal =  PIN_getOutputValue(Board_LED1);
-          PIN_setOutputValue(ledPinHandle, Board_LED1, !currVal);                           
-                                    
-          break;
-      }
+  switch (pState->pinId)
+  {
+    case Board_BUTTON0:
+      ButtonService_SetParameter(BS_BUTTON0_ID,
+                                 sizeof(pState->state),
+                                 &pState->state);
+      break;
+    case Board_BUTTON1:
+      ButtonService_SetParameter(BS_BUTTON1_ID,
+                                 sizeof(pState->state),
+                                 &pState->state);
+      break;
   }
 }
 
@@ -945,6 +940,10 @@ void user_ButtonService_CfgChangeHandler(char_data_t *pCharData)
  *
  * @return  None.
  */
+
+
+//uint8_t rxBuf[10] = "Salam";     // Receive buffer
+
 void user_DataService_ValueChangeHandler(char_data_t *pCharData)
 {
   // Value to hold the received string for printing via Log, as Log printouts
@@ -959,12 +958,51 @@ void user_DataService_ValueChangeHandler(char_data_t *pCharData)
       // Copy received data to holder array, ensuring NULL termination.
       memset(received_string, 0, DS_STRING_LEN);
       memcpy(received_string, pCharData->data, DS_STRING_LEN-1);
+
       // Needed to copy before log statement, as the holder array remains after
       // the pCharData message has been freed and reused for something else.
+      Log_info0("khalesi said:");
       Log_info3("Value Change msg: %s %s: %s",
                 (IArg)"Data Service",
                 (IArg)"String",
                 (IArg)received_string);
+
+      memcpy(received_string, buff, buff_len);
+   	  DataService_SetParameter(DS_STRING_ID, sizeof(received_string), received_string);
+
+
+  	  /////////////////////////*//////////////////////////////
+/*		uint8_t initString[40] = "";
+		uint8_t i;
+    	for(i = 0 ; i < pCharData->dataLen; i++)
+			initString[i] = pCharData->data[i];
+
+    	for(i = pCharData->dataLen; i < sizeof(initString) - 1 ; i++)
+    		initString[i] = NULL;
+
+//   	   Initalization of characteristics in Data_Service that can provide data.
+   	  DataService_SetParameter(DS_STRING_ID, sizeof(initString), initString);
+   	  Log_info0("********* 1 :");
+   	  Log_info1("message %s" , (IArg)initString);*/
+	  /////////////////////////*//////////////////////////////
+/*	  SPI_Transaction transaction;
+
+	  // Configure the transaction
+	  transaction.count = 4;
+	  transaction.txBuf = NULL;
+	  transaction.rxBuf = rxBuf;
+
+//    	  Log_info1("SPI Open: %s" , handle);
+
+	  // Begin transfer
+	  SPI_transfer(handle, &transaction);
+
+	  Log_info1("rcv data cnt %d", transaction.count);
+	  Log_info4("recieved_data %d %d %d %d", rxBuf[0], rxBuf[1], rxBuf[2], rxBuf[3]);
+	  memset(rxBuf, 0, 10);*/
+	  /////////////////////////*//////////////////////////////
+
+
       break;
 
     case DS_STREAM_ID:
@@ -1618,4 +1656,93 @@ static char *Util_getLocalNameStr(const uint8_t *data) {
 }
 
 /*********************************************************************
+ * SPI
 *********************************************************************/
+Swi_Handle mySwi;
+
+#define SPI_BUFFER_SIZE 0x0FF
+#define SPI_DATA_Len 20
+uint8_t iBuff[SPI_BUFFER_SIZE+1], oBuff[SPI_BUFFER_SIZE+1];
+
+SPI_Handle handle;
+SPI_Transaction transaction;
+uint32_t iHead=0,iTail=0,oHead=0,oTail=0;
+uint8_t buff_log[SPI_DATA_Len+4],buf[SPI_DATA_Len],buf_tr[SPI_DATA_Len]="1234567890abcdefghij";	// sending by UART buffer, sending received data buffer, Receive and transmit // buffer buff[12],
+
+static void SPI_transferCallback(SPI_Handle handle, SPI_Transaction *transaction)
+{
+    SPI_transfer(handle, transaction);
+    memcpy(buff_log, 0,SPI_DATA_Len);
+    memcpy(buff_log, transaction->rxBuf,transaction->count);
+    Log_info1("Received SPI DATA %s",(IArg)buff_log);
+//    Log_info1("Transmited SPI DATA %s",(IArg)transaction->txBuf);
+
+    if (((iHead & SPI_BUFFER_SIZE)+(transaction->count)) < SPI_BUFFER_SIZE)
+    	memcpy(&(iBuff[iHead & SPI_BUFFER_SIZE]), transaction->rxBuf,transaction->count);
+	else{
+    	memcpy(&(iBuff[iHead & SPI_BUFFER_SIZE]), transaction->rxBuf,SPI_BUFFER_SIZE - (iHead & SPI_BUFFER_SIZE));
+    	memcpy(iBuff, &(buff_log[SPI_BUFFER_SIZE - (iHead & SPI_BUFFER_SIZE)]),(transaction->count - (SPI_BUFFER_SIZE - (iHead & SPI_BUFFER_SIZE))));
+	}
+
+    iHead += transaction->count;
+    if((iHead-iTail)>buff_len - 1)
+    {
+    	memset(buff, 0, buff_len);
+    	if((iTail & SPI_BUFFER_SIZE)+(iHead-iTail) < SPI_BUFFER_SIZE){
+    		memcpy(buff, &(iBuff[iTail & SPI_BUFFER_SIZE]),(iHead-iTail));
+    		memset(&(iBuff[iTail & SPI_BUFFER_SIZE]),0,(iHead-iTail));
+    	} else {
+    		memcpy(buff, &(iBuff[iTail & SPI_BUFFER_SIZE]),(SPI_BUFFER_SIZE - (SPI_BUFFER_SIZE & iTail)));
+    		memcpy(&(iBuff[iTail & SPI_BUFFER_SIZE]), 0,(SPI_BUFFER_SIZE - (SPI_BUFFER_SIZE & iTail)));
+    		memcpy(&(buff[SPI_BUFFER_SIZE - (SPI_BUFFER_SIZE & iTail)]), iBuff,(iHead-iTail)-(SPI_BUFFER_SIZE - (SPI_BUFFER_SIZE & iTail)));
+    		memcpy(iBuff, 0,(iHead-iTail)-(SPI_BUFFER_SIZE - (SPI_BUFFER_SIZE & iTail)));
+    	}
+	iTail = iHead;
+	Log_info1("Buffered SPI data: %s",(IArg)buff);
+	Log_info2("iHead: %d - iTail: %d", iHead,iTail);
+	Log_info0("this is in spi_transfer_call back up");
+	Swi_post(mySwi);
+	Log_info0("this is in spi_transfer_call back down");
+//	DataService_SetParameter(DS_STREAM_ID, DS_STREAM_LEN, 0);
+    }
+}
+
+void SPI_Init_PZ(){
+	SPI_Params params;
+
+    // Init SPI and specify non-default parameters
+    SPI_Params_init(&params);
+    params.bitRate             = 84000000/64;
+    params.frameFormat         = SPI_POL1_PHA1;
+    params.mode                = SPI_SLAVE;
+    params.transferMode        = SPI_MODE_CALLBACK;
+    params.transferCallbackFxn = SPI_transferCallback;
+
+    // Configure the transaction
+    transaction.count = SPI_DATA_Len;
+	transaction.txBuf = buf_tr;
+    transaction.rxBuf = buf;
+    // Open the SPI and initiate the first transfer
+    handle = SPI_open(Board_SPI0, &params);
+    SPI_transfer(handle, &transaction);
+}
+
+/*********************************************************************
+ * SWI
+*********************************************************************/
+
+void swiFunc(){
+	Log_info0("this is in swiFunc up");
+	DataService_SetParameter(DS_STREAM_ID, DS_STREAM_LEN, 0);
+	Log_info0("this is in swiFunc down");
+}
+
+void SW_interrupt_init(){
+    Swi_Params swiParams;
+    Error_Block eb;
+    Swi_Params_init(&swiParams);
+    swiParams.priority = 1;
+    Error_init(&eb);
+    mySwi = Swi_create(swiFunc, &swiParams, &eb);
+}
+

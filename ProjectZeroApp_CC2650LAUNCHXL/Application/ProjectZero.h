@@ -41,10 +41,15 @@ extern "C"
 /*********************************************************************
  * INCLUDES
  */
-
+/////////////*//////////////////
+#include <ti/drivers/SPI.h>
+#include <ti/drivers/spi/SPICC26XXDMA.h>
+#include <ti/drivers/dma/UDMACC26XX.h>
+/////////////*//////////////////
 /*********************************************************************
 *  EXTERNAL VARIABLES
 */
+extern SPI_Handle handle;
 
 /*********************************************************************
  * TYPEDEFS
@@ -66,7 +71,8 @@ extern "C"
  * Task creation function for the Simple BLE Peripheral.
  */
 extern void ProjectZero_createTask(void);
-
+extern void SPI_Init_PZ(void);
+extern void SW_interrupt_init(void);
 
 /*********************************************************************
 *********************************************************************/

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?ccsproject version="1.0"?>
 <projectOptions>
-	<ccsVersion value="6.1.3"/>
+	<ccsVersion value="6.2.0"/>
 	<deviceVariant value="Cortex M.CC2650F128"/>
 	<deviceFamily value="TMS470"/>
 	<deviceEndianness value="little"/>
-	<codegenToolVersion value="5.2.5"/>
+	<codegenToolVersion value="15.12.3.LTS"/>
 	<isElfFormat value="true"/>
 	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
 	<rts value="libc.a"/>
 	<createSlaveProjects value=""/>
 	<templateProperties value="id=ProjectZeroApp_CC2650LAUNCHXL.projectspec.ProjectZeroApp_CC2650LAUNCHXL,type=rtsc,products=com.ti.rtsc.TIRTOSsimplelink:2.13.0.06,xdcToolsVersion=3.31.01.33,target=ti.targets.arm.elf.M3,platform=ti.platforms.simplelink:CC2650F128,buildProfile=release,isHybrid=true,configuroOptions=--compileOptions &quot;${COMPILER_FLAGS} &quot; ,"/>
-	<origin value="@ti-products/cc26xx_bluetooth_smart/cc26xx_bluetooth_smart__2.01.00.44423/Projects/ble/ProjectZero/CC26xx/CCS/Cloud/ProjectZeroApp_CC2650LAUNCHXL.projectspec"/>
+	<origin value="C:\Users\Sadra\Desktop\Texas\dev.ti\ble_cc26xx_2_01_00_44423_cloud__win\simplelink\ble_cc26xx_2_01_00_44423_cloud\Projects\ble\ProjectZero\CC26xx\CCS\Cloud\ProjectZeroApp_CC2650LAUNCHXL.projectspec"/>
 	<filesToOpen value="Application/ProjectZero.c,"/>
+	<isTargetManual value="false"/>
 </projectOptions>

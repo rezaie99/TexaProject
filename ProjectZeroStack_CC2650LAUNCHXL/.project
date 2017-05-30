@@ -434,19 +434,19 @@
 	<variableList>
 		<variable>
 			<name>CC26XXWARE</name>
-			<value>$%7BTI_PRODUCTS_DIR%7D/tirtos_simplelink_2_13_00_06/products/cc26xxware_2_21_01_15600</value>
+			<value>file:/C:/Users/Sadra/Desktop/Texas/dev.ti/ble_cc26xx_2_01_00_44423_cloud__win/tirtos_simplelink_2_13_00_06/products/cc26xxware_2_21_01_15600</value>
 		</variable>
 		<variable>
 			<name>PROJECT_IMPORT_LOC</name>
-			<value>$%7BTI_PRODUCTS_DIR%7D/cc26xx_bluetooth_smart/cc26xx_bluetooth_smart__2.01.00.44423/Projects/ble/ProjectZero/CC26xx/CCS/Cloud</value>
+			<value>file:/C:/Users/Sadra/Desktop/Texas/dev.ti/ble_cc26xx_2_01_00_44423_cloud__win/simplelink/ble_cc26xx_2_01_00_44423_cloud/Projects/ble/ProjectZero/CC26xx/CCS/Cloud</value>
 		</variable>
 		<variable>
 			<name>TI_BLE_SDK_BASE</name>
-			<value>$%7BTI_PRODUCTS_DIR%7D/cc26xx_bluetooth_smart/cc26xx_bluetooth_smart__2.01.00.44423</value>
+			<value>file:/C:/Users/Sadra/Desktop/Texas/dev.ti/ble_cc26xx_2_01_00_44423_cloud__win/simplelink/ble_cc26xx_2_01_00_44423_cloud</value>
 		</variable>
 		<variable>
 			<name>TI_RTOS_DRIVERS_BASE</name>
-			<value>$%7BTI_PRODUCTS_DIR%7D/tirtos_simplelink_2_13_00_06/packages</value>
+			<value>file:/C:/Users/Sadra/Desktop/Texas/dev.ti/ble_cc26xx_2_01_00_44423_cloud__win/tirtos_simplelink_2_13_00_06/packages</value>
 		</variable>
 	</variableList>
 </projectDescription>
