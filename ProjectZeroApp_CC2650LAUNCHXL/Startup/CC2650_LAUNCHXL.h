@@ -81,12 +81,12 @@ extern const PIN_Config BoardGpioInitTable[];
 #define Board_LED_OFF               0
 
 /* Discrete inputs */
-#define Board_BTN1                  IOID_13
+#define Board_BTN1                  IOID_13 // 13
 #define Board_BTN2                  IOID_14
 
 /* UART Board */
-#define Board_UART_RX               IOID_2          /* RXD  */
-#define Board_UART_TX               IOID_3          /* TXD  */
+#define Board_UART_RX               IOID_4          /* RXD  */
+#define Board_UART_TX               IOID_5          /* TXD  */
 #define Board_UART_CTS              IOID_19         /* CTS  */
 #define Board_UART_RTS              IOID_18         /* RTS */
 
@@ -94,7 +94,7 @@ extern const PIN_Config BoardGpioInitTable[];
 #define Board_SPI0_MISO             IOID_8          /* RF1.20 */
 #define Board_SPI0_MOSI             IOID_9          /* RF1.18 */
 #define Board_SPI0_CLK              IOID_10         /* RF1.16 */
-#define Board_SPI0_CSN              PIN_UNASSIGNED
+#define Board_SPI0_CSN              IOID_11
 #define Board_SPI1_MISO             PIN_UNASSIGNED
 #define Board_SPI1_MOSI             PIN_UNASSIGNED
 #define Board_SPI1_CLK              PIN_UNASSIGNED
